@@ -79,9 +79,7 @@ bool linked_list_add_at(LinkedList *list, void *data, int index) {
 	assert(NULL != data);
 	assert(index >= 0);
 	assert(list->count <= (index + 1));
-
-	
-
+    return true;
 }
 
 bool linked_list_add_all(LinkedList *list, void **elements, int count) {
@@ -92,19 +90,6 @@ bool linked_list_add_all(LinkedList *list, void **elements, int count) {
 bool linked_list_add_all_at(LinkedList *list, int index, void **elements, int count) {
 	NYI(__func__);
 	return false;
-}
-
-
-/* Inserts the specified element at the beginning of this list. */
-bool linked_list_add_first(LinkedList *list, void *data) {
-	NYI(__func__);
-	return 0;
-}
-
-/* Appends the specified element to the end of this list. */
-bool linked_list_add_last(LinkedList *list, void *data) {
-	NYI(__func__);
-	return 0;
 }
 
 /* Removes all of the elements from this list. */
@@ -141,11 +126,6 @@ bool linked_list_contains(LinkedList *list, void *data) {
 
 }
 
-/* Retrieves, but does not remove, the head (first element) of this list. */
-void* linked_list_element(LinkedList *list) {
-	return linked_list_get_first(list);
-}
-
 void* linked_list_get(LinkedList *list, int index) {
 
 	ListNode *current_node;
@@ -168,23 +148,6 @@ void* linked_list_get(LinkedList *list, int index) {
 	}
 	return NULL;
 }
-
-/* Retrieves, but does not remove, the head (first element) of this list. */
-void* linked_list_get_first(LinkedList *list) {
-	// doing this for performance instead of just calling linked_list_get
-	assert(NULL != list);
-	assert(list->count > 0);
-
-	return list->head->next->data;
-}
-
-/* Returns the last element in this list. */
-void* linked_list_get_last(LinkedList *list) {
-	assert(NULL != list);
-	assert(list->count > 0);
-	return list->tail->prev->data;
-}
-
 
 /* Returns the index of the first occurrence of the specified element 
 in this list, or -1 if this list does not contain the element. */
@@ -212,6 +175,11 @@ int linked_list_index_of(LinkedList *list, void *data) {
 
 }
 
+bool linked_list_is_empty(LinkedList *list) {
+    assert(NULL != list);
+    return list->count == 0 ? true : false;
+}
+
 /* Returns the index of the last occurrence of the specified element in 
 this list, or -1 if this list does not contain the element. */
 int linked_list_last_index_of(LinkedList *list, void *data) {
@@ -231,18 +199,8 @@ int linked_list_last_index_of(LinkedList *list, void *data) {
 		++counter;
 		current_node = current_node->prev;
 	}
+    return -1;
 }
-
-/* Adds the specified element as the tail (last element) of this list. */
-bool linked_list_offer(LinkedList *list, void *data) {
-	ListNode *node = linked_list_add_
-}
-
-/* Inserts the specified element at the front of this list. */
-bool linked_list_offer_first(LinkedList *list, void *data);
-
-/* Inserts the specified element at the end of this list. */
-bool linked_list_offer_last(LinkedList *list, void *data);
 
 ListNode* linked_list_node_with_data(LinkedList *list, void *data) {
 

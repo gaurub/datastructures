@@ -22,7 +22,7 @@ LinkedList* linked_list_new();
 bool linked_list_add(LinkedList *list, void *data);
 
 /* Insert element at specified index. 0 is the start */
-bool linked_list_add_at(LinkedList *list, int index, void *data);
+bool linked_list_add_at(LinkedList *list, void *data, int index);
 
 /* Appends all of the elements in the specified collection to the end 
 of this list, in the order that they are stored. */

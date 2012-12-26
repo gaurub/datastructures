@@ -7,7 +7,7 @@ OFILES = $(OBJECTS:%=%.o)
 
 CCC = gcc
 
-EXECUTABLE = test
+EXECUTABLE = datastruct
 
 LFLAGS = 
 
@@ -17,7 +17,7 @@ IFLAGS = -I/Developer/SDKs/MacOSX10.7.sdk/usr/include/
 
 BASEDIR =
 
-COMPILEFLAGS += -Wall -g 
+COMPILEFLAGS += -Wall -g -std=c99
 
 all : $(EXECUTABLE)
 

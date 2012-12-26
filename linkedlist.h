@@ -62,7 +62,7 @@ void* linked_list_remove(LinkedList *list, int index);
 
 /* Removes the first occurrence of the specified element 
 from this list, if it is present. */
-bool linked_list_remove_with_data(LinkedList *list, void *data);
+void* linked_list_remove_with_data(LinkedList *list, void *data);
 
 /* Removes from this list all of its elements that are 
 contained in the specified collection (optional operation). */
@@ -84,8 +84,9 @@ specified fromIndex, inclusive, and toIndex, exclusive. */
 LinkedList* linked_list_sub_list(LinkedList *list, int from, int to);
 
 /* Returns an array containing all of the elements in this 
-list in proper sequence (from first to last element). */
-void** linked_list_to_array(LinkedList *list);
+list in proper sequence (from first to last element). deep specifies
+whether or not to make a deep copy of the data elements */
+void** linked_list_to_array(LinkedList *list, bool deep);
 
 /* Method that frees the list, all nodes and 
 underlying data in the nodes IF deep is true, otherwise

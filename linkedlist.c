@@ -48,31 +48,46 @@ LinkedList* linked_list_new() {
 	return list;
 }
 
+/* internal method to add a node before a node. The naming is a little
+confusing; suggestions welcome */
+static bool add_node_before(LinkedList *list, ListNode *node, void *data) {
+
+    ListNode *new, *prev;
+   
+    prev = node->prev;
+
+    new = malloc(sizeof(ListNode));
+    if(!new) {
+        fprintf(stderr,"Couldn't allocate memory for new node.\n");
+        return false;
+    }
+    new->data = data;
+
+    // fix prev pointers
+    new->prev = prev;
+    node->prev = new;
+
+    // fix next pointers
+    new->next = node;
+    prev->next = new;
+
+    // the sole reason we have to pass that list pointer here
+    ++(list->count);
+
+    return true;
+}
+
 bool linked_list_add(LinkedList *list, void *data) {
 
 	assert(NULL != list);
 	assert(NULL != data);
 
-	/* Always insert before tail */
-	ListNode *new_node = malloc(sizeof(ListNode));
-	if(!new_node) {
-			fprintf(stderr, "Big problems, Could not allocate new node for insertion.\n");
-			return false;
-	}
-	new_node->data = data;
-
-	/* manipulate pointers */
-	new_node->next = list->tail;
-	new_node->prev = list->tail->prev;
-	new_node->prev->next = new_node;
-	list->tail->prev = new_node;
-	++(list->count);
-	return true;
+    return add_node_before(list, list->tail, data);
 }
 
 bool linked_list_add_at(LinkedList *list, void *data, int index) {
 
-	ListNode *current_node, *prev_node, *insertion_node;
+	ListNode *current_node;
 	int counter;
 
 	assert(NULL != list);
@@ -86,25 +101,7 @@ bool linked_list_add_at(LinkedList *list, void *data, int index) {
     // rather than the not-null status of the next.
     for(counter = 0; counter < list->count; counter++) {
         if(counter == index) {
-            /* pointer manipulation! woohoo */
-            insertion_node = malloc(sizeof(ListNode));
-            if(!insertion_node) {
-                fprintf(stderr, "Could not allocate memory for new node.\n");
-                return false;
-            }
-            /* naming is a bit weird, because the current_node becomes the
-            next node and the insertion node becomes the current_node.
-
-            TODO: figure out proper order for pointer setting */
-            insertion_node->data = data;
-            insertion_node->next = current_node;
-            prev_node = current_node->prev;
-            current_node->prev = insertion_node;
-            prev_node->next = insertion_node;
-            insertion_node->prev = prev_node;
-            prev_node = current_node->prev;
-            ++(list->count);
-            return true;
+            return add_node_before(list, current_node, data);
         }
         current_node = current_node->next;
     }
@@ -147,10 +144,10 @@ bool linked_list_contains(LinkedList *list, void *data) {
 	current_node = list->head->next;
 
 	while(current_node->next) {
-			if(data == current_node->data) {
-					return true;
-			}
-			current_node = current_node->next;
+		if(data == current_node->data) {
+    		return true;
+		}
+		current_node = current_node->next;
 	}
 	return false;
 
@@ -169,12 +166,12 @@ void* linked_list_get(LinkedList *list, int index) {
 	current_node = list->head->next;
 	counter = 0;
 	while(current_node->next) {
-			if(counter == index) {
-					return current_node->data;
-			}
+		if(counter == index) {
+    		return current_node->data;
+		}
 
-			++counter;
-			current_node = current_node->next;
+		++counter;
+		current_node = current_node->next;
 	}
 	return NULL;
 }
@@ -213,6 +210,7 @@ bool linked_list_is_empty(LinkedList *list) {
 /* Returns the index of the last occurrence of the specified element in 
 this list, or -1 if this list does not contain the element. */
 int linked_list_last_index_of(LinkedList *list, void *data) {
+
 	ListNode *current_node;
 	int counter;
 
@@ -232,9 +230,21 @@ int linked_list_last_index_of(LinkedList *list, void *data) {
     return -1;
 }
 
+static void* remove_node(LinkedList *list, ListNode *node) {
+    ListNode *prev, *next;
+    prev = node->prev;
+    next = node->next;
+    next->prev = prev;
+    prev->next = next;
+    void *data = node->data;
+    free(node);
+    --(list->count);
+    return data;
+}
+
 void* linked_list_remove(LinkedList *list, int index) {
 
-    ListNode *current_node, *prev_node, *next_node;
+    ListNode *current_node;
     int counter;
 
     assert(NULL != list);
@@ -245,18 +255,59 @@ void* linked_list_remove(LinkedList *list, int index) {
     for loop seems nicer */
     for(counter = 0; counter < list->count; counter++) {
         if(counter == index) {
-           prev_node = current_node->prev;
-           next_node = current_node->next;
-           next_node->prev = prev_node;
-           prev_node->next = next_node;
-           void* to_return = current_node->data;
-           free(current_node);
-           --(list->count);
-           return to_return;
+           return remove_node(list, current_node);
         }
         current_node = current_node->next;
     }
     return NULL;
+}
+
+void* linked_list_remove_with_data(LinkedList *list, void *data) {
+    
+    ListNode* current_node;
+
+    assert(NULL != list);
+    assert(NULL != data);
+
+    current_node = list->head->next;
+    while(current_node->next) {
+        if(data == current_node->data) {
+            return remove_node(list, current_node);
+        }
+        current_node = current_node->next;
+    }
+    return NULL;
+}
+
+bool linked_list_remove_all(LinkedList *list, void** elements, int index) {
+    NYI(__func__);
+    return false;
+}
+
+bool linked_list_retail_all(LinkedList *list, void** elements, int index) {
+    NYI(__func__);
+    return false;
+}
+
+void* linked_list_set(LinkedList *list, int index, void *data) {
+    NYI(__func__);
+    return NULL;
+}
+
+int linked_list_size(LinkedList *list) {
+
+	assert(NULL != list);
+	return list->count;
+}
+
+LinkedList* linked_list_sub_list(LinkedList *list, int from, int to) {
+    NYI(__func__);
+    return NULL;
+}
+
+void** linked_list_to_array(LinkedList *list, bool deep) {
+   NYI(__func__);
+   return NULL;
 }
 
 ListNode* linked_list_node_with_data(LinkedList *list, void *data) {
@@ -277,12 +328,6 @@ ListNode* linked_list_node_with_data(LinkedList *list, void *data) {
 		current_node = current_node->next;
 	}
 	return NULL;
-}
-
-int linked_list_size(LinkedList *list) {
-
-	assert(NULL != list);
-	return list->count;
 }
 
 /* function that frees list along with all data */
@@ -324,7 +369,7 @@ int main(int argc, char** argv) {
 	print_list(list);
     linked_list_add_at(list, &q, 1);
     print_list(list);
-    linked_list_remove(list, 2);
+    linked_list_remove_with_data(list, &q);
     print_list(list);
 	linked_list_free(list, false);
 	return 0;

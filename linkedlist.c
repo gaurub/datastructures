@@ -72,14 +72,34 @@ bool linked_list_add(LinkedList *list, void *data) {
 
 bool linked_list_add_at(LinkedList *list, void *data, int index) {
 
-	ListNode *current_node;
+	ListNode *current_node, *prev_node, *insertion_node;
 	int counter;
 
 	assert(NULL != list);
 	assert(NULL != data);
 	assert(index >= 0);
 	assert(list->count <= (index + 1));
-    return true;
+
+    current_node = list->head->next;
+    // for some reason, a for loop seems more intuitive here
+    // just to convey that everything is index based
+    // rather than the not-null status of the next.
+    for(counter = 0; counter < list->count; counter++) {
+        if(counter == index) {
+            insertion_node = malloc(sizeof(ListNode));
+            insertion_node->data = data;
+            insertion_node->next = current_node;
+            prev_node = current_node->prev;
+            current_node->prev = insertion_node;
+            prev_node->next = insertion_node;
+            insertion_node->prev = prev_node;
+            prev_node = current_node->prev;
+            return true;
+        }
+        current_node = current_node->next;
+    }
+
+    return false;
 }
 
 bool linked_list_add_all(LinkedList *list, void **elements, int count) {
@@ -261,12 +281,12 @@ static void print_list(LinkedList *list) {
 /* Main function to test functionality */
 int main(int argc, char** argv) {
 	LinkedList *list = linked_list_new();
-	int i = 5, j = 10;
+	int i = 5, j = 10, q = 25;
 	linked_list_add(list, &i);
 	linked_list_add(list, &j);
 	print_list(list);
-	linked_list_add_all(list, NULL, 0);
-	linked_list_add_all_at(list, 0, NULL, 0);
+    linked_list_add_at(list, &q, 1);
+    print_list(list);
 	linked_list_free(list, false);
 	return 0;
 }

@@ -1,7 +1,7 @@
 #declaring properties
 RM = rm -rf
 
-OBJECTS = list
+OBJECTS = linkedlist
 
 OFILES = $(OBJECTS:%=%.o)
 

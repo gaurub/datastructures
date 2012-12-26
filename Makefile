@@ -13,7 +13,7 @@ LFLAGS =
 
 LIBS = 
 
-IFLAGS = -I/Developer/SDKs/MacOSX10.7.sdk/usr/include/
+IFLAGS = -I/Developer/SDKs/MacOSX10.7.sdk/usr/include/ -I./include/
 
 BASEDIR =
 
@@ -25,7 +25,7 @@ $(EXECUTABLE) : $(OFILES)
 	@echo
 	$(CCC) -o $(EXECUTABLE) $(COMPILEFLAGS) $(OFILES) $(IFLAGS) $(LFLAGS) $(LIBS)
 
-%.o : %.c
+%.o : src/%.c
 	$(CCC) $(COMPILEFLAGS) $(IFLAGS) $(CCFLAG) -c $<
 	
 %c : %.h

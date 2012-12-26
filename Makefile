@@ -1,9 +1,13 @@
 #declaring properties
 RM = rm -rf
 
+BIN_DIR = bin
+
 OBJECTS = linkedlist
 
 OFILES = $(OBJECTS:%=%.o)
+
+OFILES_BIN = $(OBJECTS:%=$(BIN_DIR)/%.o)
 
 CCC = gcc
 
@@ -23,13 +27,13 @@ all : $(EXECUTABLE)
 
 $(EXECUTABLE) : $(OFILES)
 	@echo
-	$(CCC) -o $(EXECUTABLE) $(COMPILEFLAGS) $(OFILES) $(IFLAGS) $(LFLAGS) $(LIBS)
+	$(CCC) -o $(BIN_DIR)/$(EXECUTABLE) $(COMPILEFLAGS) $(OFILES_BIN) $(IFLAGS) $(LFLAGS) $(LIBS)
 
 %.o : src/%.c
-	$(CCC) $(COMPILEFLAGS) $(IFLAGS) $(CCFLAG) -c $<
+	$(CCC) $(COMPILEFLAGS) $(IFLAGS) $(CCFLAG) -c $< -o $(BIN_DIR)/$@
 	
 %c : %.h
 
 clean:
-	$(RM) $(OFILES)
-	$(RM) $(EXECUTABLE)
+	$(RM) $(OFILES_BIN)
+	$(RM) $(BIN_DIR)/$(EXECUTABLE)

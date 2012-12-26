@@ -17,7 +17,7 @@ IFLAGS = -I/Developer/SDKs/MacOSX10.7.sdk/usr/include/
 
 BASEDIR =
 
-COMPILEFLAGS += -Wall -g -std=c99
+COMPILEFLAGS += -Wall -g -std=c99 -DDEBUG
 
 all : $(EXECUTABLE)
 

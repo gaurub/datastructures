@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <assert.h>
 #include "linkedlist.h"
+#include "common.h"
 
 #define NYI(x) printf("Not yet implemented: %s.\n", x);
 
@@ -12,25 +13,25 @@ LinkedList* linked_list_new() {
 
 	/* conditions to fail somewhat gracefully */
 	if(!list) {
-			fprintf(stderr, "Big problems, Could not allocate list.\n");
-			return NULL;
+		fprintf(stderr, "Big problems, Could not allocate list.\n");
+		return NULL;
 	}
 	list->count = 0;
 
 	/* set up head and tail node */
 	ListNode *head = malloc(sizeof(ListNode));
 	if(!head) {
-			free(list);
-			fprintf(stderr, "Big problems, Could not allocate head node.\n");
-			return NULL;
+		free(list);
+		fprintf(stderr, "Big problems, Could not allocate head node.\n");
+		return NULL;
 	}
 
 	ListNode *tail = malloc(sizeof(ListNode));
 	if(!tail) {
-			free(list);
-			free(head);
-			fprintf(stderr, "Big problems, Could not allocate tail node.\n");
-			return NULL;
+		free(list);
+		free(head);
+		fprintf(stderr, "Big problems, Could not allocate tail node.\n");
+		return NULL;
 	}
 
 	/* set our pointers */
@@ -49,32 +50,32 @@ LinkedList* linked_list_new() {
 }
 
 /* internal method to add a node before a node. The naming is a little
-confusing; suggestions welcome */
+	 confusing; suggestions welcome */
 static bool add_node_before(LinkedList *list, ListNode *node, void *data) {
 
-    ListNode *new, *prev;
-   
-    prev = node->prev;
+	ListNode *new, *prev;
 
-    new = malloc(sizeof(ListNode));
-    if(!new) {
-        fprintf(stderr,"Couldn't allocate memory for new node.\n");
-        return false;
-    }
-    new->data = data;
+	prev = node->prev;
 
-    // fix prev pointers
-    new->prev = prev;
-    node->prev = new;
+	new = malloc(sizeof(ListNode));
+	if(!new) {
+		fprintf(stderr,"Couldn't allocate memory for new node.\n");
+		return false;
+	}
+	new->data = data;
 
-    // fix next pointers
-    new->next = node;
-    prev->next = new;
+	// fix prev pointers
+	new->prev = prev;
+	node->prev = new;
 
-    // the sole reason we have to pass that list pointer here
-    ++(list->count);
+	// fix next pointers
+	new->next = node;
+	prev->next = new;
 
-    return true;
+	// the sole reason we have to pass that list pointer here
+	++(list->count);
+
+	return true;
 }
 
 bool linked_list_add(LinkedList *list, void *data) {
@@ -82,7 +83,7 @@ bool linked_list_add(LinkedList *list, void *data) {
 	assert(NULL != list);
 	assert(NULL != data);
 
-    return add_node_before(list, list->tail, data);
+	return add_node_before(list, list->tail, data);
 }
 
 bool linked_list_add_at(LinkedList *list, void *data, int index) {
@@ -95,18 +96,18 @@ bool linked_list_add_at(LinkedList *list, void *data, int index) {
 	assert(index >= 0);
 	assert(list->count <= (index + 1));
 
-    current_node = list->head->next;
-    // for some reason, a for loop seems more intuitive here
-    // just to convey that everything is index based
-    // rather than the not-null status of the next.
-    for(counter = 0; counter < list->count; counter++) {
-        if(counter == index) {
-            return add_node_before(list, current_node, data);
-        }
-        current_node = current_node->next;
-    }
+	current_node = list->head->next;
+	// for some reason, a for loop seems more intuitive here
+	// just to convey that everything is index based
+	// rather than the not-null status of the next.
+	for(counter = 0; counter < list->count; counter++) {
+		if(counter == index) {
+			return add_node_before(list, current_node, data);
+		}
+		current_node = current_node->next;
+	}
 
-    return false;
+	return false;
 }
 
 bool linked_list_add_all(LinkedList *list, void **elements, int count) {
@@ -140,12 +141,12 @@ bool linked_list_contains(LinkedList *list, void *data) {
 	assert(NULL != data);
 
 	/* we start at the "next" of the head node 
-	   because the head node will never contain data */
+		 because the head node will never contain data */
 	current_node = list->head->next;
 
 	while(current_node->next) {
 		if(data == current_node->data) {
-    		return true;
+			return true;
 		}
 		current_node = current_node->next;
 	}
@@ -167,7 +168,7 @@ void* linked_list_get(LinkedList *list, int index) {
 	counter = 0;
 	while(current_node->next) {
 		if(counter == index) {
-    		return current_node->data;
+			return current_node->data;
 		}
 
 		++counter;
@@ -177,25 +178,25 @@ void* linked_list_get(LinkedList *list, int index) {
 }
 
 /* Returns the index of the first occurrence of the specified element 
-in this list, or -1 if this list does not contain the element. */
+	 in this list, or -1 if this list does not contain the element. */
 int linked_list_index_of(LinkedList *list, void *data) {
 
 	ListNode *current_node;
-    int counter;
+	int counter;
 
 	assert(NULL != list);
 	assert(NULL != data);
 
 	/* we start at the "next" of the head node 
-	   because the head node will never contain data */
+		 because the head node will never contain data */
 	current_node = list->head->next;
-    counter = 0;
+	counter = 0;
 
 	while(current_node->next) {
 		if(data == current_node->data) {
-				return counter;
+			return counter;
 		}
-        ++counter;
+		++counter;
 		current_node = current_node->next;
 	}
 	return -1;
@@ -203,12 +204,12 @@ int linked_list_index_of(LinkedList *list, void *data) {
 }
 
 bool linked_list_is_empty(LinkedList *list) {
-    assert(NULL != list);
-    return list->count == 0 ? true : false;
+	assert(NULL != list);
+	return list->count == 0 ? true : false;
 }
 
 /* Returns the index of the last occurrence of the specified element in 
-this list, or -1 if this list does not contain the element. */
+	 this list, or -1 if this list does not contain the element. */
 int linked_list_last_index_of(LinkedList *list, void *data) {
 
 	ListNode *current_node;
@@ -227,71 +228,71 @@ int linked_list_last_index_of(LinkedList *list, void *data) {
 		++counter;
 		current_node = current_node->prev;
 	}
-    return -1;
+	return -1;
 }
 
 static void* remove_node(LinkedList *list, ListNode *node) {
-    ListNode *prev, *next;
-    prev = node->prev;
-    next = node->next;
-    next->prev = prev;
-    prev->next = next;
-    void *data = node->data;
-    free(node);
-    --(list->count);
-    return data;
+	ListNode *prev, *next;
+	prev = node->prev;
+	next = node->next;
+	next->prev = prev;
+	prev->next = next;
+	void *data = node->data;
+	free(node);
+	--(list->count);
+	return data;
 }
 
 void* linked_list_remove(LinkedList *list, int index) {
 
-    ListNode *current_node;
-    int counter;
+	ListNode *current_node;
+	int counter;
 
-    assert(NULL != list);
+	assert(NULL != list);
 
-    current_node = list->head->next;
-    counter = 0;
-    /* again, when iterating with indices, for some reason a 
-    for loop seems nicer */
-    for(counter = 0; counter < list->count; counter++) {
-        if(counter == index) {
-           return remove_node(list, current_node);
-        }
-        current_node = current_node->next;
-    }
-    return NULL;
+	current_node = list->head->next;
+	counter = 0;
+	/* again, when iterating with indices, for some reason a 
+		 for loop seems nicer */
+	for(counter = 0; counter < list->count; counter++) {
+		if(counter == index) {
+			return remove_node(list, current_node);
+		}
+		current_node = current_node->next;
+	}
+	return NULL;
 }
 
 void* linked_list_remove_with_data(LinkedList *list, void *data) {
-    
-    ListNode* current_node;
 
-    assert(NULL != list);
-    assert(NULL != data);
+	ListNode* current_node;
 
-    current_node = list->head->next;
-    while(current_node->next) {
-        if(data == current_node->data) {
-            return remove_node(list, current_node);
-        }
-        current_node = current_node->next;
-    }
-    return NULL;
+	assert(NULL != list);
+	assert(NULL != data);
+
+	current_node = list->head->next;
+	while(current_node->next) {
+		if(data == current_node->data) {
+			return remove_node(list, current_node);
+		}
+		current_node = current_node->next;
+	}
+	return NULL;
 }
 
 bool linked_list_remove_all(LinkedList *list, void** elements, int index) {
-    NYI(__func__);
-    return false;
+	NYI(__func__);
+	return false;
 }
 
 bool linked_list_retail_all(LinkedList *list, void** elements, int index) {
-    NYI(__func__);
-    return false;
+	NYI(__func__);
+	return false;
 }
 
 void* linked_list_set(LinkedList *list, int index, void *data) {
-    NYI(__func__);
-    return NULL;
+	NYI(__func__);
+	return NULL;
 }
 
 int linked_list_size(LinkedList *list) {
@@ -301,13 +302,13 @@ int linked_list_size(LinkedList *list) {
 }
 
 LinkedList* linked_list_sub_list(LinkedList *list, int from, int to) {
-    NYI(__func__);
-    return NULL;
+	NYI(__func__);
+	return NULL;
 }
 
 void** linked_list_to_array(LinkedList *list, bool deep) {
-   NYI(__func__);
-   return NULL;
+	NYI(__func__);
+	return NULL;
 }
 
 ListNode* linked_list_node_with_data(LinkedList *list, void *data) {
@@ -318,12 +319,12 @@ ListNode* linked_list_node_with_data(LinkedList *list, void *data) {
 	assert(NULL != data);
 
 	/* we start at the "next" of the head node 
-	   because the head node will never contain data */
+		 because the head node will never contain data */
 	current_node = list->head->next;
 
 	while(current_node->next) {
 		if(data == current_node->data) {
-				return current_node;
+			return current_node;
 		}
 		current_node = current_node->next;
 	}
@@ -338,9 +339,9 @@ void linked_list_free(LinkedList *list, bool deep) {
 	ListNode *current_node = list->head;
 	ListNode *next_node;
 	while(current_node->next) {
-       	if(deep) {
-       		free(current_node->data);
-        }
+		if(deep) {
+			free(current_node->data);
+		}
 		next_node = current_node->next;
 		free(current_node);
 		current_node = next_node;
@@ -367,10 +368,11 @@ int main(int argc, char** argv) {
 	linked_list_add(list, &i);
 	linked_list_add(list, &j);
 	print_list(list);
-    linked_list_add_at(list, &q, 1);
-    print_list(list);
-    linked_list_remove_with_data(list, &q);
-    print_list(list);
+	linked_list_add_at(list, &q, 1);
+	print_list(list);
+	linked_list_remove_with_data(list, &q);
+	print_list(list);
+	LOG_DEBUG("Hello World!", __FILE__, __LINE__);
 	linked_list_free(list, false);
 	return 0;
 }

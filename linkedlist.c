@@ -86,7 +86,16 @@ bool linked_list_add_at(LinkedList *list, void *data, int index) {
     // rather than the not-null status of the next.
     for(counter = 0; counter < list->count; counter++) {
         if(counter == index) {
+            /* pointer manipulation! woohoo */
             insertion_node = malloc(sizeof(ListNode));
+            if(!insertion_node) {
+                fprintf(stderr, "Could not allocate memory for new node.\n");
+                return false;
+            }
+            /* naming is a bit weird, because the current_node becomes the
+            next node and the insertion node becomes the current_node.
+
+            TODO: figure out proper order for pointer setting */
             insertion_node->data = data;
             insertion_node->next = current_node;
             prev_node = current_node->prev;
@@ -94,6 +103,7 @@ bool linked_list_add_at(LinkedList *list, void *data, int index) {
             prev_node->next = insertion_node;
             insertion_node->prev = prev_node;
             prev_node = current_node->prev;
+            ++(list->count);
             return true;
         }
         current_node = current_node->next;
@@ -222,6 +232,33 @@ int linked_list_last_index_of(LinkedList *list, void *data) {
     return -1;
 }
 
+void* linked_list_remove(LinkedList *list, int index) {
+
+    ListNode *current_node, *prev_node, *next_node;
+    int counter;
+
+    assert(NULL != list);
+
+    current_node = list->head->next;
+    counter = 0;
+    /* again, when iterating with indices, for some reason a 
+    for loop seems nicer */
+    for(counter = 0; counter < list->count; counter++) {
+        if(counter == index) {
+           prev_node = current_node->prev;
+           next_node = current_node->next;
+           next_node->prev = prev_node;
+           prev_node->next = next_node;
+           void* to_return = current_node->data;
+           free(current_node);
+           --(list->count);
+           return to_return;
+        }
+        current_node = current_node->next;
+    }
+    return NULL;
+}
+
 ListNode* linked_list_node_with_data(LinkedList *list, void *data) {
 
 	ListNode *current_node;
@@ -286,6 +323,8 @@ int main(int argc, char** argv) {
 	linked_list_add(list, &j);
 	print_list(list);
     linked_list_add_at(list, &q, 1);
+    print_list(list);
+    linked_list_remove(list, 2);
     print_list(list);
 	linked_list_free(list, false);
 	return 0;

@@ -57,11 +57,8 @@ bool linked_list_is_empty(LinkedList *list);
 this list, or -1 if this list does not contain the element. */
 int linked_list_last_index_of(LinkedList *list, void *data);
 
-/* Retrieves and removes the head (first element) of this list. */
-void* linked_list_remove(LinkedList *list);
-
 /* Removes the element at the specified position in this list. */
-void* linked_list_remove_at(LinkedList *list, int index);
+void* linked_list_remove(LinkedList *list, int index);
 
 /* Removes the first occurrence of the specified element 
 from this list, if it is present. */

@@ -95,23 +95,24 @@ void test_linked_list_add_at(void) {
 }
 
 int main(int argc, char **argv) {
-	CU_pSuite pSuite = NULL;
+
 	if(CUE_SUCCESS != CU_initialize_registry())
 		return CU_get_error();
 
-	pSuite = CU_add_suite("LinkedList", init_suite_linked_list, 
-																	clean_suite_linked_list);
-	if(NULL == pSuite) {
-		CU_cleanup_registry();
-		return CU_get_error();
-	}
+	CU_TestInfo linked_list_test_array [] = {
+			{ "TestNew", test_linked_list_new },
+			{ "TestAdd", test_linked_list_add },
+			{ "TestAddAt", test_linked_list_add_at },
+			CU_TEST_INFO_NULL,
+		};
 
-	if(NULL == CU_add_test(pSuite, "Testing linked_list_new",
-																	test_linked_list_new) ||
-		 NULL == CU_add_test(pSuite, "Testing linked_list_add", 
-																		test_linked_list_add) ||
-		 NULL == CU_add_test(pSuite, "Testing linked_list_add_at",
-		 																test_linked_list_add_at)) {
+	CU_SuiteInfo suites[] = {
+		{ "LinkedListSuite", init_suite_linked_list, clean_suite_linked_list,
+																									linked_list_test_array},
+		CU_SUITE_INFO_NULL,
+	};
+
+	if(CUE_SUCCESS != CU_register_suites(suites)) {
 		CU_cleanup_registry();
 		return CU_get_error();
 	}

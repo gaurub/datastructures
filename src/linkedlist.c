@@ -171,13 +171,13 @@ bool linked_list_add_all_at(LinkedList *list, int index, void **elements, int co
 /* Removes all of the elements from this list. */
 void linked_list_clear(LinkedList *list, bool deep) {
 
-	/* leave the head and tail as is */
 	ListNode *current_node;
 	ListNode *next_node;
 	void *data;
 	
 	assert(NULL != list);
 
+	/* leave the head and tail as is, so grabbing "next" */
 	current_node = list->head->next;
 	while(current_node->next) {
 		next_node = current_node->next;
@@ -190,7 +190,7 @@ void linked_list_clear(LinkedList *list, bool deep) {
 }
 
 /* Returns a shallow copy of this LinkedList. */
-LinkedList* linked_list_clone(LinkedList *list, bool deep) {
+LinkedList* linked_list_clone(LinkedList *list) {
 	NYI(__func__);
 	return NULL;
 }

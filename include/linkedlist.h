@@ -38,7 +38,7 @@ bool linked_list_add_all_at(LinkedList *list, int index, void **elements, int co
 void linked_list_clear(LinkedList *list, bool deep);
 
 /* Returns a copy of this LinkedList. */
-LinkedList* linked_list_clone(LinkedList *list, bool deep);
+LinkedList* linked_list_clone(LinkedList *list);
 
 /* Returns true if this list contains the specified element. */
 bool linked_list_contains(LinkedList *list, void *data);

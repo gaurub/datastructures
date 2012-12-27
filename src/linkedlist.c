@@ -111,8 +111,19 @@ bool linked_list_add_at(LinkedList *list, void *data, int index) {
 }
 
 bool linked_list_add_all(LinkedList *list, void **elements, int count) {
-	NYI(__func__);
-	return false;
+
+	int counter;
+
+	assert(NULL != list);
+	assert(NULL != elements);
+	assert(count >= 0); // if it's 0, nothing below will run
+
+	for(counter = 0; counter < count; ++counter) {
+		if(!add_node_before(list, list->tail, elements[counter])) {
+			return false;
+		}
+	}
+	return true;
 }
 
 bool linked_list_add_all_at(LinkedList *list, int index, void **elements, int count) {

@@ -25,7 +25,9 @@ bool linked_list_add(LinkedList *list, void *data);
 bool linked_list_add_at(LinkedList *list, void *data, int index);
 
 /* Appends all of the elements in the specified collection to the end 
-	 of this list, in the order that they are stored. */
+	 of this list, in the order that they are stored. You can get rid of 
+	 any pointers to the memory associated with the elements, but DO NOT
+	 FREE the underlying data, as the data is not copied. */
 bool linked_list_add_all(LinkedList *list, void **elements, int count);
 
 /* Inserts all of the elements in the specified collection into this list, 

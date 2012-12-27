@@ -6,6 +6,15 @@
 
 static LinkedList *list;
 
+static void print_list(LinkedList *list) {
+	printf("Size of list= %d\n", list->count);
+	ListNode *current_node = list->head->next;
+	while(current_node->next) {
+		printf("Value of data = %d.\n", *((int *) current_node->data));
+		current_node = current_node->next;
+	}
+}
+
 int init_suite_linked_list(void) {
 	return 0;
 }
@@ -94,6 +103,21 @@ void test_linked_list_add_at(void) {
 	destroy_old_list();
 }
 
+void test_linked_list_add_all(void) {
+	int j = 1, k = 2, l = 3, m = 4;
+	int* array[] = {&j, &k, &l, &m}; 
+	void *test_data;
+
+	setup_empty_list();
+	linked_list_add_all(list,(void **) array, 4);
+	CU_ASSERT(list->count == 4);
+	test_data = list->head->next->data;
+	int *data = (int *) test_data;
+	CU_ASSERT(*data == 1);
+	print_list(list);
+	destroy_old_list();
+}
+
 int main(int argc, char **argv) {
 
 	if(CUE_SUCCESS != CU_initialize_registry())
@@ -103,6 +127,7 @@ int main(int argc, char **argv) {
 			{ "TestNew", test_linked_list_new },
 			{ "TestAdd", test_linked_list_add },
 			{ "TestAddAt", test_linked_list_add_at },
+			{ "TestAddAll", test_linked_list_add_all },
 			CU_TEST_INFO_NULL,
 		};
 

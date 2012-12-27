@@ -3,7 +3,7 @@ RM = rm -rf
 
 BIN_DIR = bin
 
-OBJECTS = linkedlist
+OBJECTS = linkedlist test_linkedlist
 
 OFILES = $(OBJECTS:%=%.o)
 
@@ -13,9 +13,9 @@ CCC = gcc
 
 EXECUTABLE = datastruct
 
-LFLAGS = 
+LFLAGS = -L./lib
 
-LIBS = 
+LIBS = -lcunit
 
 IFLAGS = -I/Developer/SDKs/MacOSX10.7.sdk/usr/include/ -I./include/
 
@@ -23,7 +23,7 @@ BASEDIR =
 
 COMPILEFLAGS += -Wall -g -std=c99 -DDEBUG
 
-all : $(EXECUTABLE)
+all : $(EXECUTABLE) $(TEST_EXECUTABLE)
 
 $(EXECUTABLE) : $(OFILES)
 	@echo

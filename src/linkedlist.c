@@ -94,7 +94,7 @@ bool linked_list_add_at(LinkedList *list, void *data, int index) {
 	assert(NULL != list);
 	assert(NULL != data);
 	assert(index >= 0);
-	assert(list->count <= (index + 1));
+	assert((index + 1) <= list->count);
 
 	current_node = list->head->next;
 	// for some reason, a for loop seems more intuitive here
@@ -162,7 +162,7 @@ void* linked_list_get(LinkedList *list, int index) {
 	// assert list is not null, index >=0 & index is valid
 	assert(NULL != list);
 	assert(index >= 0);
-	assert(list->count <= (index + 1));
+	assert((index + 1) <= list->count);
 
 	current_node = list->head->next;
 	counter = 0;
@@ -362,7 +362,7 @@ static void print_list(LinkedList *list) {
 }
 
 /* Main function to test functionality */
-int main(int argc, char** argv) {
+/*int main(int argc, char** argv) {
 	LinkedList *list = linked_list_new();
 	int i = 5, j = 10, q = 25;
 	linked_list_add(list, &i);
@@ -375,4 +375,4 @@ int main(int argc, char** argv) {
 	LOG_DEBUG("Hello World!", __FILE__, __LINE__);
 	linked_list_free(list, false);
 	return 0;
-}
+}*/

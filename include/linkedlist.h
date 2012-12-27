@@ -35,7 +35,7 @@ bool linked_list_add_all(LinkedList *list, void **elements, int count);
 bool linked_list_add_all_at(LinkedList *list, int index, void **elements, int count);
 
 /* Removes all of the elements from this list. */
-void linked_list_clear(LinkedList *list);
+void linked_list_clear(LinkedList *list, bool deep);
 
 /* Returns a copy of this LinkedList. */
 LinkedList* linked_list_clone(LinkedList *list, bool deep);

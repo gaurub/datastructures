@@ -78,6 +78,19 @@ static bool add_node_before(LinkedList *list, ListNode *node, void *data) {
 	return true;
 }
 
+static void* remove_node(LinkedList *list, ListNode *node) {
+	ListNode *prev, *next;
+	prev = node->prev;
+	next = node->next;
+	next->prev = prev;
+	prev->next = next;
+	void *data = node->data;
+	free(node);
+	--(list->count);
+	return data;
+}
+
+
 bool linked_list_add(LinkedList *list, void *data) {
 
 	assert(NULL != list);
@@ -127,13 +140,53 @@ bool linked_list_add_all(LinkedList *list, void **elements, int count) {
 }
 
 bool linked_list_add_all_at(LinkedList *list, int index, void **elements, int count) {
-	NYI(__func__);
-	return false;
+
+	int counter;
+	ListNode *current_node;
+
+	assert(NULL != list);
+	assert(NULL != elements);
+	assert(count >= 0);
+	assert((index + 1) <= list->count);
+
+	/* get to the right place */
+	current_node = list->head->next;
+	for(counter = 0; counter < list->count; ++counter) {
+		if(counter == index) {
+			break;
+		}
+		current_node = current_node->next;
+	}
+
+	for(counter = 0; counter < count; ++counter) {
+		if(!add_node_before(list, current_node, elements[counter])) {
+			// This will not exit cleanly; the transaction will not be aborted in the middle.
+			return false;	
+		}
+	}
+
+	return true;
 }
 
 /* Removes all of the elements from this list. */
-void linked_list_clear(LinkedList *list) {
-	NYI(__func__);
+void linked_list_clear(LinkedList *list, bool deep) {
+
+	/* leave the head and tail as is */
+	ListNode *current_node;
+	ListNode *next_node;
+	void *data;
+	
+	assert(NULL != list);
+
+	current_node = list->head->next;
+	while(current_node->next) {
+		next_node = current_node->next;
+		data = remove_node(list, current_node);
+		if(deep) {
+			free(data);
+		}
+		current_node = next_node;
+	}
 }
 
 /* Returns a shallow copy of this LinkedList. */
@@ -240,18 +293,6 @@ int linked_list_last_index_of(LinkedList *list, void *data) {
 		current_node = current_node->prev;
 	}
 	return -1;
-}
-
-static void* remove_node(LinkedList *list, ListNode *node) {
-	ListNode *prev, *next;
-	prev = node->prev;
-	next = node->next;
-	next->prev = prev;
-	prev->next = next;
-	void *data = node->data;
-	free(node);
-	--(list->count);
-	return data;
 }
 
 void* linked_list_remove(LinkedList *list, int index) {

@@ -29,12 +29,22 @@ static void setup_empty_list(void) {
 	list = linked_list_new();
 }
 
-static void setup_list_with_items(LinkedList *list) {
+static void setup_list_with_items(LinkedList *l) {
 
-	list = linked_list_new();
-	linked_list_add(list, &a);
-	linked_list_add(list, &b);
-	linked_list_add(list, &c);
+	l = linked_list_new();
+	linked_list_add(l, &a);
+	linked_list_add(l, &b);
+	linked_list_add(l, &c);
+	printf("Set up total list with 3 items.");
+}
+
+static void setup_list_with_items2(LinkedList **l) {
+
+	*l = linked_list_new();
+	linked_list_add(*l, &a);
+	linked_list_add(*l, &b);
+	linked_list_add(*l, &c);
+	printf("Set up total list with 3 items.");
 }
 
 static void destroy_old_list(bool deep) {
@@ -109,7 +119,7 @@ void test_linked_list_add_all(void) {
 	void *test_data;
 
 	setup_empty_list();
-	linked_list_add_all(list,(void **) array, 4);
+	linked_list_add_all(list,(const void **) array, 4);
 	CU_ASSERT(list->count == 4);
 	test_data = list->head->next->data;
 	int *data = (int *) test_data;
@@ -124,7 +134,7 @@ void test_linked_list_add_all_at(void) {
 	
 	setup_list_with_items(list);
 	current_size = list->count;
-	linked_list_add_all_at(list, 1, (void **) array, 4);
+	linked_list_add_all_at(list, 1, (const void **) array, 4);
 	current_size += 4;
 	CU_ASSERT(current_size == list->count);
 	// TODO: really test this
@@ -138,6 +148,8 @@ void test_linked_list_clear(void) {
 	CU_ASSERT(list->head->next == list->tail);
 	CU_ASSERT(list->tail->prev == list->head);
 }
+
+void (*setup)(LinkedList **l) = &setup_list_with_items2;
 
 int main(int argc, char **argv) {
 
@@ -168,6 +180,7 @@ int main(int argc, char **argv) {
 //	CU_set_output_filename("linked_list");
 	CU_basic_run_tests();
 	CU_cleanup_registry();
+	LinkedList *list2;
 	return CU_get_error();
 }
 

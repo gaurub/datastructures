@@ -124,7 +124,12 @@ LinkedList* linked_list_sub_list_deep(LinkedList *list, int from, int to,
 /* Returns an array containing all of the elements in this 
 	 list in proper sequence (from first to last element). deep specifies
 	 whether or not to make a deep copy of the data elements */
-void** linked_list_to_array(LinkedList *list, bool deep);
+void** linked_list_to_array(LinkedList *list);
+
+/* Returns an array containing all of the elements in this 
+	 list in proper sequence (from first to last element). deep specifies
+	 whether or not to make a deep copy of the data elements */
+void** linked_list_to_array_deep(LinkedList *list, void *(*copy_func)(void *data));
 
 /* Method that frees the list, all nodes and 
 	 underlying data in the nodes IF deep is true, otherwise

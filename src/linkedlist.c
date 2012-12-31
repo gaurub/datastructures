@@ -551,26 +551,28 @@ bool linked_list_retain_all(LinkedList *list, void** elements, int count) {
 	
 	ListNode *current_node, *placeholder_node;
 	int counter;
-	bool remove_node = true;
+	bool node_remove;
 
 	assert(NULL != list);
 	assert(NULL != elements);
 	assert(count >= 0 && count <= list->count);
 
 	current_node = list->head->next;
+	node_remove = true;
 	while(current_node->next) {
 		for(counter = 0; counter < count; ++counter) {
 			if(elements[counter] == current_node->data) {
-				remove_node = false;		
+				node_remove = false;		
 				break;
 			}
 		}
-		if(true == remove_node) {
+		if(true == node_remove) {
 			placeholder_node = current_node->prev;
 			remove_node(list, current_node);
 			current_node = placeholder_node;
 		}
 		current_node = current_node->next;
+		node_remove = true;
 	}
 
 	return true;
@@ -578,8 +580,35 @@ bool linked_list_retain_all(LinkedList *list, void** elements, int count) {
 
 bool linked_list_retain_all_custom(LinkedList *list, void** elements, int count,
 																							int (*compare_func)(void *a, void *b)) {
-	NYI(__func__);
-	return false;
+	ListNode *current_node, *placeholder_node;
+	int counter;
+	bool node_remove;
+
+	assert(NULL != list);
+	assert(NULL != elements);
+	assert(count >= 0 && count <= list->count);
+
+	current_node = list->head->next;
+	node_remove = true;
+	while(current_node->next) {
+		for(counter = 0; counter < count; ++counter) {
+			if(EQUALS == compare_func(elements[counter],current_node->data)){
+				node_remove = false;		
+				break;
+			}
+		}
+		if(true == node_remove) {
+			placeholder_node = current_node->prev;
+			remove_node(list, current_node);
+			current_node = placeholder_node;
+		} 
+		current_node = current_node->next;
+		node_remove = true; /* really debated whether putting this in an "else"
+												block above; did this for simplicity */
+	}
+
+	return true;
+
 }
 
 void* linked_list_set(LinkedList *list, int index, void *data) {
@@ -613,13 +642,123 @@ int linked_list_size(LinkedList *list) {
 }
 
 LinkedList* linked_list_sub_list(LinkedList *list, int from, int to) {
-	NYI(__func__);
-	return NULL;
+
+	LinkedList *sub_list;
+	int counter;
+
+	assert(NULL != list);
+	assert(from < to);
+	assert(to < (list->count - 1));
+	assert(from >= 0);
+
+	sub_list = linked_list_new();
+	if(!sub_list) {
+		LOG_DEBUG("Error creating new list.", __FILE__, __LINE__);
+		return NULL;
+	}
+
+	for(counter = from; counter <= to; ++counter) {
+		if(!add_node_before(sub_list, sub_list->tail, linked_list_get(list, counter))) {
+			LOG_DEBUG("Error adding node.", __FILE__, __LINE__);
+			linked_list_free(sub_list, false);
+			return NULL;
+		}
+	}
+
+	return sub_list;
 }
 
-void** linked_list_to_array(LinkedList *list, bool deep) {
-	NYI(__func__);
-	return NULL;
+LinkedList* linked_list_sub_list_deep(LinkedList *list, int from, int to,
+																			void *(*copy_func)(void *data)) {
+	LinkedList *sub_list;
+	int counter;
+
+	assert(NULL != list);
+	assert(from < to);
+	assert(to < (list->count - 1));
+	assert(from >= 0);
+
+	sub_list = linked_list_new();
+	if(!sub_list) {
+		LOG_DEBUG("Error creating new list.", __FILE__, __LINE__);
+		return NULL;
+	}
+
+	for(counter = from; counter <= to; ++counter) {
+		void *data = copy_func(linked_list_get(list, counter));
+		if(!data) {
+			LOG_DEBUG("Deep copy of node data failed.", __FILE__, __LINE__);
+			linked_list_free(sub_list, true);
+			return NULL;
+		}
+		if(!add_node_before(sub_list, sub_list->tail, data)) {
+			LOG_DEBUG("Error adding node.", __FILE__, __LINE__);
+			linked_list_free(sub_list, true);
+			return NULL;
+		}
+	}
+
+	return sub_list;
+}
+
+void** linked_list_to_array(LinkedList *list) {
+
+	void **elements;
+	ListNode *current_node;
+	int counter;
+
+	assert(NULL != list);
+	
+	*elements = malloc(sizeof(void *) * list->count);
+	if(!elements) {
+		LOG_DEBUG("Allocation of array failed.", __FILE__, __LINE__);
+		return NULL;
+	}
+
+	current_node = list->head->next;
+	counter = 0;
+	while(current_node->next) {
+		elements[counter] = current_node->data;		
+		current_node = current_node->next;
+		++counter;
+	}
+
+	return elements;
+}
+
+void** linked_list_to_array_deep(LinkedList *list, void *(*copy_func)(void *data)) {
+
+	void **elements;
+	ListNode *current_node;
+	int counter;
+	int free_counter;
+
+	assert(NULL != list);
+	
+	*elements = malloc(sizeof(void *) * list->count);
+	if(!elements) {
+		LOG_DEBUG("Allocation of array failed.", __FILE__, __LINE__);
+		return NULL;
+	}
+
+	current_node = list->head->next;
+	counter = 0;
+	while(current_node->next) {
+		void *data = copy_func(current_node->data);
+		if(!data) {
+			LOG_DEBUG("Error copying data for insertion into array.", __FILE__, __LINE__);
+			// free memory for nodes already copied
+			for(free_counter = 0; free_counter < counter; ++free_counter) {
+				free(elements[free_counter]);
+			}
+			free(elements);  
+		}
+		elements[counter] = data;		
+		current_node = current_node->next;
+		++counter;
+	}
+
+	return elements;
 }
 
 ListNode* linked_list_node_with_data(LinkedList *list, void *data) {
@@ -635,6 +774,27 @@ ListNode* linked_list_node_with_data(LinkedList *list, void *data) {
 
 	while(current_node->next) {
 		if(data == current_node->data) {
+			return current_node;
+		}
+		current_node = current_node->next;
+	}
+	return NULL;
+}
+
+ListNode* linked_list_node_with_data_custom(LinkedList *list, void *data,
+																						int (*compare_func)(void *a, void *b)) {
+
+	ListNode *current_node;
+
+	assert(NULL != list);
+	assert(NULL != data);
+
+	/* we start at the "next" of the head node 
+		 because the head node will never contain data */
+	current_node = list->head->next;
+
+	while(current_node->next) {
+		if(EQUALS == compare_func(data,current_node->data)) {
 			return current_node;
 		}
 		current_node = current_node->next;

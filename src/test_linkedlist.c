@@ -38,15 +38,6 @@ static void setup_list_with_items(LinkedList *l) {
 	printf("Set up total list with 3 items.");
 }
 
-static void setup_list_with_items2(LinkedList **l) {
-
-	*l = linked_list_new();
-	linked_list_add(*l, &a);
-	linked_list_add(*l, &b);
-	linked_list_add(*l, &c);
-	printf("Set up total list with 3 items.");
-}
-
 static void destroy_old_list(bool deep) {
 	linked_list_free(list, deep);
 }
@@ -149,7 +140,89 @@ void test_linked_list_clear(void) {
 	CU_ASSERT(list->tail->prev == list->head);
 }
 
-void (*setup)(LinkedList **l) = &setup_list_with_items2;
+void test_linked_list_clear_custom(void) {
+}
+
+void test_linked_list_clone(void) {
+}
+
+void test_linked_list_clone_custom(void) {
+}
+
+void test_linked_list_contains(void) {
+}
+
+void test_linked_list_contains_custom(void) {
+}
+
+void test_linked_list_get(void) {
+}
+
+void test_linked_list_index_of(void) {
+}
+
+void test_linked_list_index_of_custom(void) {
+}
+
+void test_linked_list_is_empty(void) {
+}
+
+void test_linked_list_last_index_of(void) {
+}
+
+void test_linked_list_last_index_of_custom(void) {
+}
+
+void test_linked_list_remove(void) {
+}
+
+void test_linked_list_remove_with_data(void) {
+}
+
+void test_linked_list_remove_with_data_custom(void) {
+}
+
+void test_linked_list_remove_all(void) {
+}
+
+void test_linked_list_remove_all_custom(void) {
+}
+
+void test_linked_list_retain_all(void) {
+}
+
+void test_linked_list_retain_all_custom(void) {
+}
+
+void test_linked_list_set(void) {
+}
+
+void test_linked_list_size(void) {
+}
+
+void test_linked_list_sub_list(void) {
+}
+
+void test_linked_list_sub_list_deep(void) {
+}
+
+void test_linked_list_to_array(void) {
+}
+
+void test_linked_list_to_array_deep(void) {
+}
+
+void test_linked_list_free(void) {
+}
+
+void test_linked_list_free_custom(void) {
+}
+
+void test_linked_list_node_with_data(void) {
+}
+
+void test_linked_list_node_with_data_custom(void) {
+}
 
 int main(int argc, char **argv) {
 
@@ -177,10 +250,8 @@ int main(int argc, char **argv) {
 		return CU_get_error();
 	}
 
-//	CU_set_output_filename("linked_list");
 	CU_basic_run_tests();
 	CU_cleanup_registry();
-	LinkedList *list2;
 	return CU_get_error();
 }
 

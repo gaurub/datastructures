@@ -142,4 +142,7 @@ void linked_list_free(LinkedList *list, bool deep);
 	 whether the cleanup is deep or shallow. */
 void linked_list_free_custom(LinkedList *list, void (*destroy_func)(void *data));
 
+/* method in the place of iterator. Style copied from Glib */
+void linked_list_for_each(LinkedList *list, void (*operation)(void *data));
+
 #endif /* __LINKEDLIST_H__ */

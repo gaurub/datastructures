@@ -29,7 +29,7 @@ $(EXECUTABLE) : $(OFILES)
 	@echo
 	$(CCC) -o $(BIN_DIR)/$(EXECUTABLE) $(COMPILEFLAGS) $(OFILES_BIN) $(IFLAGS) $(LFLAGS) $(LIBS)
 
-%.o : src/%.c
+%.o : %.c
 	$(CCC) $(COMPILEFLAGS) $(IFLAGS) $(CCFLAG) -c $< -o $(BIN_DIR)/$@
 	
 %c : %.h

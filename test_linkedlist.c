@@ -201,7 +201,27 @@ void test_linked_list_contains(void) {
 	CU_ASSERT(!linked_list_contains(list, &test_out));
 }
 
+static int test_compare_contains_custom(void *a, void *b) {
+	int *a1 = (int *) a;
+	int *b1 = (int *) b;
+	if(*a1 < *b1) return -1;
+	else if(*a1 == *b1) return 0;
+	else return 1;
+}
+
 void test_linked_list_contains_custom(void) {
+	int j = 1, k = 2, l = 6, m = 4;
+	int test_out = 2;
+	int* array[] = { &j, &k, &l, &m }; 
+
+	setup_empty_list();
+
+	linked_list_add_all(list,(const void **) array, 4);
+	CU_ASSERT(linked_list_contains_custom(list, &j, &test_compare_contains_custom));
+	CU_ASSERT(linked_list_contains_custom(list, &k, &test_compare_contains_custom));
+	CU_ASSERT(linked_list_contains_custom(list, &l, &test_compare_contains_custom));
+	CU_ASSERT(linked_list_contains_custom(list, &m, &test_compare_contains_custom));
+	CU_ASSERT(linked_list_contains_custom(list, &test_out, &test_compare_contains_custom));
 }
 
 void test_linked_list_get(void) {
@@ -283,6 +303,7 @@ int main(int argc, char **argv) {
 			{ "TestClone", test_linked_list_clone },
 			{ "TestCloneCustom", test_linked_list_clone_custom },
 			{ "TestContains", test_linked_list_contains },
+			{ "TestContainsCustom", test_linked_list_contains_custom },
 			CU_TEST_INFO_NULL,
 		};
 

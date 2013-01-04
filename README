@@ -14,3 +14,4 @@ JCF specs and create both thread-safe and unsafe versions of them. This should b
 Some Milstones (can also be inferred from commits):
 1) 31/12/2012: Doubly linked list completed; need to work on tests for this.
 2) 2/1/2013: Started work on the Hashtable (Map) implementation; need some serious reading for this one.
+3) 4/1/2013: Started integrating pull requests here.

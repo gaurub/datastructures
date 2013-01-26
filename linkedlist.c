@@ -243,6 +243,7 @@ LinkedList* linked_list_clone_deep(LinkedList *list, void *(*copy_func)(void *da
 
 	LinkedList *new_list;
 	ListNode *current_node;
+	void *data;
 
 	assert(NULL != list);
 	assert(NULL != copy_func);
@@ -257,7 +258,7 @@ LinkedList* linked_list_clone_deep(LinkedList *list, void *(*copy_func)(void *da
 	current_node = list->head->next;
 	while(current_node->next) {
 
-		void *data = copy_func(current_node->data);
+		data = copy_func(current_node->data);
 		if(!data) {
 			LOG_DEBUG("Error copying data while cloning list. Aborting clone...", __FILE__, __LINE__);
 			linked_list_free(new_list, true); /* attemt cleanup */
@@ -312,7 +313,6 @@ bool linked_list_contains_custom(LinkedList *list, const void *data,
 	/* we start at the "next" of the head node 
 		 because the head node will never contain data */
 	current_node = list->head->next;
-
 	while(current_node->next) {
 		if(EQUALS == compare_func(data,current_node->data)) {
 			return true;

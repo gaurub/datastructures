@@ -183,7 +183,7 @@ void test_linked_list_clone(void) {
 	destroy_old_list(false);
 }
 
-void test_linked_list_clone_custom(void) {
+void test_linked_list_clone_deep(void) {
 }
 
 void test_linked_list_contains(void) {
@@ -199,6 +199,7 @@ void test_linked_list_contains(void) {
 	CU_ASSERT(linked_list_contains(list, &l));
 	CU_ASSERT(linked_list_contains(list, &m));
 	CU_ASSERT(!linked_list_contains(list, &test_out));
+	destroy_old_list(false);
 }
 
 static int test_compare_contains_custom(void *a, void *b) {
@@ -225,12 +226,38 @@ void test_linked_list_contains_custom(void) {
 }
 
 void test_linked_list_get(void) {
+	int j = 1, k = 4, l = 6, m = 4;
+	int* array[] = { &j, &k, &l, &m }; 
+
+	setup_empty_list();
+
+	linked_list_add_all(list, (const void **) array, 4);
+	int *data = (int *) linked_list_get(list, 2);
+	CU_ASSERT(*data == l);
+	CU_ASSERT(data == &l);
+	destroy_old_list(false);
 }
 
 void test_linked_list_index_of(void) {
+	int j = 1, k = 4, l = 6, m = 4;
+	int test_none = 9;
+	int* array[] = { &j, &k, &l, &m }; 
+	int index;
+
+	setup_empty_list();
+
+	linked_list_add_all(list, (const void **) array, 4);
+	index = linked_list_index_of(list, &k);
+	CU_ASSERT(index == 1);
+	index = linked_list_index_of(list, &m);
+	CU_ASSERT(index == 3);
+	index = linked_list_index_of(list, &test_none);
+	CU_ASSERT(index == -1);
+	destroy_old_list(false);
 }
 
 void test_linked_list_index_of_custom(void) {
+
 }
 
 void test_linked_list_is_empty(void) {
@@ -301,9 +328,11 @@ int main(int argc, char **argv) {
 			{ "TestClear" , test_linked_list_clear },
 			{ "TestClearCustom", test_linked_list_clear_custom },
 			{ "TestClone", test_linked_list_clone },
-			{ "TestCloneCustom", test_linked_list_clone_custom },
+			{ "TestCloneCustom", test_linked_list_clone_deep },
 			{ "TestContains", test_linked_list_contains },
 			{ "TestContainsCustom", test_linked_list_contains_custom },
+			{ "TestGet", test_linked_list_get },
+			{ "TestIndexOf", test_linked_list_index_of },
 			CU_TEST_INFO_NULL,
 		};
 

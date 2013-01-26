@@ -9,7 +9,7 @@ OFILES = $(OBJECTS:%=%.o)
 
 OFILES_BIN = $(OBJECTS:%=$(BIN_DIR)/%.o)
 
-CCC = gcc
+CCC = clang
 
 EXECUTABLE = datastruct
 
@@ -27,13 +27,13 @@ all : $(EXECUTABLE) $(TEST_EXECUTABLE)
 
 $(EXECUTABLE) : $(OFILES)
 	@echo
-	$(CCC) -o $(BIN_DIR)/$(EXECUTABLE) $(COMPILEFLAGS) $(OFILES_BIN) $(IFLAGS) $(LFLAGS) $(LIBS)
+	$(CCC) -o $(EXECUTABLE) $(COMPILEFLAGS) $(OFILES) $(IFLAGS) $(LFLAGS) $(LIBS)
 
 %.o : %.c
-	$(CCC) $(COMPILEFLAGS) $(IFLAGS) $(CCFLAG) -c $< -o $(BIN_DIR)/$@
+	$(CCC) $(COMPILEFLAGS) $(IFLAGS) $(CCFLAG) -c $< -o $@
 	
 %c : %.h
 
 clean:
-	$(RM) $(OFILES_BIN)
-	$(RM) $(BIN_DIR)/$(EXECUTABLE)
+	$(RM) $(OFILES)
+	$(RM) $(EXECUTABLE)

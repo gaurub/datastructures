@@ -6,7 +6,8 @@
 
 /**
 * Main file for linked list implementation.
-* Implementation of external API + internal static functions
+* Implementation of external API + internal static functions.
+* Not completely unit tested as of yet.
 **/
 
 LinkedList* linked_list_new() {

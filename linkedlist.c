@@ -1,8 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
-#include "linkedlist.h"
-#include "common.h"
+#include "include/linkedlist.h"
+#include "include/common.h"
+
+/**
+* Main file for linked list implementation.
+* Implementation of external API + internal static functions
+**/
 
 LinkedList* linked_list_new() {
 
@@ -727,14 +732,15 @@ void** linked_list_to_array(LinkedList *list) {
 
 void** linked_list_to_array_deep(LinkedList *list, void *(*copy_func)(void *data)) {
 
-	void **elements;
+	void **elements, *element;
 	ListNode *current_node;
 	int counter;
 	int free_counter;
 
 	assert(NULL != list);
 	
-	*elements = malloc(sizeof(void *) * list->count);
+	element = malloc(sizeof(void *) * list->count);
+    elements = &element;
 	if(!elements) {
 		LOG_DEBUG("Allocation of array failed.", __FILE__, __LINE__);
 		return NULL;

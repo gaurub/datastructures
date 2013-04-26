@@ -3,13 +3,13 @@ RM = rm -rf
 
 BIN_DIR = bin
 
-OBJECTS = linkedlist test_linkedlist
+OBJECTS = arraylist linkedlist test_linkedlist
 
 OFILES = $(OBJECTS:%=%.o)
 
 OFILES_BIN = $(OBJECTS:%=$(BIN_DIR)/%.o)
 
-CCC = clang
+CCC = gcc
 
 EXECUTABLE = datastruct
 

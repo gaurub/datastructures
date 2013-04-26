@@ -4,8 +4,9 @@
 #include <stdbool.h>
 
 typedef struct ArrayList_t {
-	void *array;
+	void* array;
 	int count;
+	int capacity;
 } ArrayList;
 
 /* Creates a new, empty list */

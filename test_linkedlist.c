@@ -1,8 +1,8 @@
-#include "linkedlist.h"
+#include "include/linkedlist.h"
 #include <stdlib.h>
 #include <stdbool.h>
-#include "CUnit/Basic.h"
-#include "CUnit/CUnit.h"
+#include "include/CUnit/Basic.h"
+#include "include/CUnit/CUnit.h"
 
 static LinkedList *list;
 

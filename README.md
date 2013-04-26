@@ -11,6 +11,11 @@ so thought that was a noble goal.
 This is my first attempt at something like that. I will create structures that are defined in the
 JCF specs and create both thread-safe and unsafe versions of them. This should be fun!
 
+Another one of my goals is to be as clear in the code itself as possible. I've even split things
+up into multiple lines when one would have probably sufficed, but I would like every intention
+to be clear from the code itself. Also, some of the design decisions I've made were made to 
+facilitate this. Above all, I want anyone who reads this to understand exactly what's going on.
+
 Some Milestones (can also be inferred from commits):
 1) 31/12/2012: Doubly linked list completed; need to work on tests for this.
 2) 2/1/2013: Started work on the Hashtable (Map) implementation; need some serious reading for this one.
